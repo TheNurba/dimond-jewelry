@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: dimond-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dimond
+      POSTGRES_PASSWORD: dimond
+      POSTGRES_DB: dimond
+    ports:
+      - "5432:5432"
+    volumes:
+      - dimond_pgdata:/var/lib/postgresql/data
+volumes:
+  dimond_pgdata:
