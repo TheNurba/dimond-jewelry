@@ -21,7 +21,7 @@ html, body {
   .input { @apply w-full rounded-full border border-ink/15 bg-white px-5 py-3 text-sm placeholder:text-ink/40 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20; }
   .chip { @apply inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-white px-4 py-2 text-sm font-medium text-ink/70 transition hover:border-ink/30 hover:text-ink cursor-pointer select-none; }
   .chip-active { @apply !bg-ink !text-white !border-ink; }
-  .card { @apply group relative rounded-2xl bg-white border border-ink/5 overflow-hidden transition-all duration-300 hover:shadow-card hover:-translate-y-0.5; }
+  .card { @apply relative rounded-2xl bg-white border border-ink/5 overflow-hidden transition-all duration-300 hover:shadow-card hover:-translate-y-0.5; }
   .badge { @apply inline-flex items-center gap-1 rounded-full bg-gold/15 text-gold-dark px-2.5 py-1 text-[11px] font-semibold uppercase tracking-widest; }
   .badge-sale { @apply inline-flex items-center gap-1 rounded-full bg-ink text-white px-2.5 py-1 text-[11px] font-semibold uppercase tracking-widest; }
 }

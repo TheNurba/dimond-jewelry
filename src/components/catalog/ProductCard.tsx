@@ -22,7 +22,7 @@ export default function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <Link href={`/product/${product.slug}`} className="card animate-fade-in">
+    <Link href={`/product/${product.slug}`} className="card group animate-fade-in">
       <div className="relative aspect-square bg-stone overflow-hidden">
         <Image
           src={product.images[0]}
