@@ -1,50 +1,22 @@
-import { prisma } from '@/lib/prisma';
 import ProductCard from '@/components/catalog/ProductCard';
 import CategoryFilter from '@/components/catalog/CategoryFilter';
 import SearchBar from '@/components/catalog/SearchBar';
 import SortSelect from '@/components/catalog/SortSelect';
 import Pagination from '@/components/catalog/Pagination';
-
-export const dynamic = 'force-dynamic';
-
-const PAGE_SIZE = 12;
+import { categories, getProducts } from '@/lib/data';
 
 type SP = { category?: string; q?: string; sort?: string; page?: string };
 
-export default async function CatalogPage({ searchParams }: { searchParams: SP }) {
+export default function CatalogPage({ searchParams }: { searchParams: SP }) {
   const { category, q, sort = 'new', page: pageStr } = searchParams;
   const page = Math.max(1, Number(pageStr) || 1);
 
-  const categories = await prisma.category.findMany({ orderBy: { order: 'asc' } });
-
-  const where: any = {};
-  if (category) {
-    const cat = categories.find((c) => c.slug === category);
-    if (cat) where.categoryId = cat.id;
-  }
-  if (q) {
-    where.OR = [
-      { name: { contains: q, mode: 'insensitive' } },
-      { description: { contains: q, mode: 'insensitive' } },
-    ];
-  }
-
-  const orderBy: any =
-    sort === 'price-asc' ? { price: 'asc' } :
-    sort === 'price-desc' ? { price: 'desc' } :
-    { createdAt: 'desc' };
-
-  const [total, products] = await Promise.all([
-    prisma.product.count({ where }),
-    prisma.product.findMany({
-      where,
-      orderBy,
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-    }),
-  ]);
-
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const { items: products, total, totalPages } = getProducts({
+    categorySlug: category,
+    q,
+    sort,
+    page,
+  });
 
   return (
     <div>
@@ -97,7 +69,7 @@ export default async function CatalogPage({ searchParams }: { searchParams: SP }
         ) : (
           <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {products.map((p) => (
-              <ProductCard key={p.id} product={p as any} />
+              <ProductCard key={p.id} product={p} />
             ))}
           </div>
         )}

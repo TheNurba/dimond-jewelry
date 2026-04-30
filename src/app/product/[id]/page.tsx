@@ -1,26 +1,17 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
-import { prisma } from '@/lib/prisma';
 import { formatPrice } from '@/lib/format';
+import { getProductBySlug, getRelated } from '@/lib/data';
 import ProductGallery from '@/components/product/ProductGallery';
 import AddToCartBlock from '@/components/product/AddToCartBlock';
 import ProductCard from '@/components/catalog/ProductCard';
 
-export const dynamic = 'force-dynamic';
-
-export default async function ProductPage({ params }: { params: { id: string } }) {
-  const product = await prisma.product.findUnique({
-    where: { slug: params.id },
-    include: { category: true },
-  });
+export default function ProductPage({ params }: { params: { id: string } }) {
+  const product = getProductBySlug(params.id);
   if (!product) return notFound();
 
-  const related = await prisma.product.findMany({
-    where: { categoryId: product.categoryId, NOT: { id: product.id } },
-    take: 4,
-    orderBy: { createdAt: 'desc' },
-  });
+  const related = getRelated(product);
 
   return (
     <div className="container-x py-8 md:py-12">
@@ -70,7 +61,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
           </dl>
 
           <div className="mt-8">
-            <AddToCartBlock product={product as any} />
+            <AddToCartBlock product={product} />
           </div>
 
           <ul className="mt-8 grid gap-2 text-sm text-ink/60">
@@ -86,7 +77,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
           <h2 className="font-serif text-2xl mb-6">Окшош буюмдар</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {related.map((p) => (
-              <ProductCard key={p.id} product={p as any} />
+              <ProductCard key={p.id} product={p} />
             ))}
           </div>
         </section>

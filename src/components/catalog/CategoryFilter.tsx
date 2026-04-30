@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
-import type { Category } from '@/types/product';
+import type { CategoryData as Category } from '@/lib/data';
 import { cn } from '@/lib/format';
 
 export default function CategoryFilter({ categories }: { categories: Category[] }) {

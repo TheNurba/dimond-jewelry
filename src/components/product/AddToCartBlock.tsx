@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Minus, Plus, ShoppingBag } from 'lucide-react';
-import type { Product } from '@/types/product';
+import type { ProductData as Product } from '@/lib/data';
 import { useCart } from '@/context/CartContext';
 
 export default function AddToCartBlock({ product }: { product: Product }) {
